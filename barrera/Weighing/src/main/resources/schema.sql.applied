@@ -1,0 +1,63 @@
+-- Users, Roles, Permissions
+
+-- dev_permissions
+create sequence sicog.dev_permission_id_seq increment 1 start 1 minvalue 1 maxvalue 9223372036854775807 cache 1;
+alter sequence sicog.dev_permission_id_seq owner to sicog;
+
+create table if not exists sicog.dev_permissions (
+  id bigint NOT NULL DEFAULT nextval('dev_permission_id_seq'::regclass),
+  name varchar(100) default null,
+  constraint dev_permission_pkey primary key (id),
+  constraint dev_permission_name_ukey unique (name)
+);
+alter table sicog.dev_permissions owner to sicog;
+
+-- dev_roles
+create sequence sicog.dev_role_id_seq increment 1 start 1 minvalue 1 maxvalue 9223372036854775807 cache 1;
+alter sequence sicog.dev_role_id_seq owner to sicog;
+
+create table if not exists sicog.dev_roles (
+  id bigint NOT NULL DEFAULT nextval('dev_role_id_seq'::regclass),
+  name varchar(100) default null,
+  constraint dev_roles_pkey primary key (id),
+  constraint dev_roles_name_ukey unique (name)
+);
+alter table sicog.dev_roles owner to sicog;
+
+-- dev_users
+create sequence sicog.dev_user_id_seq increment 1 start 1 minvalue 1 maxvalue 9223372036854775807 cache 1;
+alter sequence sicog.dev_user_id_seq owner to sicog;
+
+create table if not exists sicog.dev_users (
+  id bigint NOT NULL DEFAULT nextval('dev_user_id_seq'::regclass),
+  username varchar(100) not null,
+  password varchar(100) not null,
+  email varchar(200) not null,
+  enabled varchar(1) not null,
+  account_non_expired varchar(1) not null,
+  credentials_non_expired varchar(1) not null,
+  account_non_locked varchar(1) not null,
+  constraint dev_users_pkey primary key (id),
+  constraint dev_users_username_ukey unique (username)
+);
+alter table sicog.dev_users owner to sicog;
+
+-- dev_permission_dev_roles
+create table if not exists sicog.dev_permissions_dev_roles (
+  permission_id bigint,
+  role_id bigint,
+  constraint dev_permissions_dev_roles_pkey primary key (permission_id, role_id),
+  constraint dev_permissions_dev_roles_permissions_fkey foreign key (permission_id) references sicog.dev_permissions (id),
+  constraint dev_permission_dev_role_roles_fkey foreign key (role_id) references sicog.dev_roles (id)
+);
+alter table sicog.dev_permissions_dev_roles owner to sicog;
+
+-- dev_roles_dev_users
+create table if not exists sicog.dev_roles_dev_users (
+  role_id bigint,
+  user_id bigint,
+  constraint dev_roles_dev_users_pkey primary key (role_id, user_id),
+  constraint dev_roles_dev_users_roles_fkey foreign key (role_id) references sicog.dev_roles (id),
+  constraint dev_roles_dev_users_user_fkey foreign key (user_id) references sicog.dev_users (id)
+);
+alter table sicog.dev_roles_dev_users owner to sicog;

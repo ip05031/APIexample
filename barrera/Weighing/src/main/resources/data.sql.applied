@@ -1,0 +1,11 @@
+INSERT INTO dev_roles (name) VALUES
+	('ROL_admin'),('ROL_user');
+
+INSERT INTO dev_users (username, password, email, enabled, account_non_expired, credentials_non_expired, account_non_locked) VALUES
+('admin','$2b$10$.J7gZlTFVRwEn7x3IlB5KuSI4qxEnBrh2oCnkQd6Ggnz.Neg3copu', 'admin@sicog.gob.ni', 'Y', 'Y', 'Y', 'Y'),
+('sinter', '$2b$10$n1yliEEhJ.J93wyoZ9nsJ.T025FUsiAq8AwEYA2ShBhHUCpJRsxym','sinter@sinter.com.ni', 'Y', 'Y', 'Y', 'Y');
+
+INSERT INTO dev_roles_dev_users (role_id, user_id)
+    VALUES
+    (1, 1), /* rol_admin-admin */
+    (2, 2); /* rol_user-sinter */
